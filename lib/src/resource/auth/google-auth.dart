@@ -12,9 +12,13 @@ import 'base-auth.dart';
 class GoogleAuth extends BaseAuth {
   Map<String, String>? _authHeaders;
   Client? client;
-  final GoogleSignIn _googleSignIn = GoogleSignIn(scopes: ['https://www.googleapis.com/auth/drive.file', DriveApi.driveAppdataScope]);
+  // TODO : edit scopes as you want
+  final GoogleSignIn _googleSignIn = GoogleSignIn(scopes: [
+    'https://www.googleapis.com/auth/drive.file',
+    DriveApi.driveAppdataScope
+  ]);
 
-  GoogleAuth(): super() {
+  GoogleAuth() : super() {
     _initLoginListener();
   }
 
@@ -32,9 +36,8 @@ class GoogleAuth extends BaseAuth {
     }
     final _authentication = await _googleAccount.authentication;
     final OAuthCredential credential = GoogleAuthProvider.credential(
-      idToken: _authentication.idToken,
-      accessToken: _authentication.accessToken
-    );
+        idToken: _authentication.idToken,
+        accessToken: _authentication.accessToken);
     return credential;
   }
 
@@ -99,10 +102,9 @@ class GoogleAuth extends BaseAuth {
   }
 }
 
-
 class GoogleApiClient extends IOClient {
   late Map<String, String> _authHeaders;
-  GoogleApiClient(this._authHeaders): super();
+  GoogleApiClient(this._authHeaders) : super();
 
   @override
   Future<IOStreamedResponse> send(BaseRequest request) {
@@ -111,6 +113,8 @@ class GoogleApiClient extends IOClient {
 
   @override
   Future<Response> head(Uri url, {Map<String, String>? headers}) {
-    return super.head(url, headers: headers??{}..addAll(_authHeaders));
+    return super.head(url,
+        headers: headers ?? {}
+          ..addAll(_authHeaders));
   }
 }
