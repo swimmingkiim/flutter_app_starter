@@ -23,6 +23,11 @@ arch -x86_64 pod install --repo-update
 ```
 
 #### Common
+```
+cd /path/to/desire
+/path/to/this/repo/create-from-template.sh [project name]
+```
+
 First, you need to copy `lib/config/config.sample.dart` to `lib/config/config.dart` and fill out required information or leave empty if you don't use them.
 ```
 flutter pub get
