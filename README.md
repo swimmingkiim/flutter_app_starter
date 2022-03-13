@@ -1,5 +1,8 @@
 # flutter_app_starter
-This is a boilerplate for my personal project. Anyone can clone, modify and make your own flutter app
+This is a boilerplate for my personal project. Anyone can clone, modify and make your own flutter app.
+
+Note : This repository is focused on integration between service from outside(api, google, apple login etc).
+So, you need to Customize logic based on your requirements.
 
 * included code
     1. api
@@ -20,12 +23,14 @@ arch -x86_64 pod install --repo-update
 ```
 
 #### Common
+First, you need to copy `lib/config/config.sample.dart` to `lib/config/config.dart` and fill out required information or leave empty if you don't use them.
 ```
 flutter pub get
 [open simulator]
 flutter run
 ```
 
+## References
 ## commands for Mac M1
 ```
 cd ./ios
