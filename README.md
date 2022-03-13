@@ -16,11 +16,6 @@ So, you need to Customize logic based on your requirements.
 ## Getting Started
 
 ### For Development
-#### Macos M1 : Run this command first!
-```
-cd ios
-arch -x86_64 pod install --repo-update
-```
 
 #### Common
 ```
@@ -29,6 +24,13 @@ cd /path/to/desire
 ```
 
 First, you need to copy `lib/config/config.sample.dart` to `lib/config/config.dart` and fill out required information or leave empty if you don't use them.
+
+#### Macos M1 : Run this command first!
+```
+cd ios
+arch -x86_64 pod install --repo-update
+```
+
 ```
 flutter pub get
 [open simulator]
