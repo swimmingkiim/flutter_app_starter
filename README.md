@@ -19,9 +19,13 @@ flutter run
 ```
 
 ## commands for Mac M1
+```
 cd ./ios
 arch -x86_64 pod install --repo-update
+```
 
 ## commands for android keystore generation
+```
 mkdir ./android/keystore
 keytool -genkey -v -keystore ./android/keystore/key.jks -keyalg RSA -keysize 2048 -validity 10000 -alias upload
+```
