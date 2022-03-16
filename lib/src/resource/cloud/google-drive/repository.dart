@@ -35,17 +35,23 @@ class GoogleDriveRepository extends BaseCloudRepository {
   @override
   upload(String jsonString, {String? path}) async {
     final filePath = path ?? (await getApplicationDocumentsDirectory()).path;
+    // 1. make your json data to json file
     final jsonFile = await JsonFile.stringToJsonFile(jsonString,
         dirPath: filePath,
         fileName: config['cloud']['common']['DRIVE_BACKUP_FILE_NAME']);
+    // 2. instanciate File(this is not from io, but from googleapis
     final fileToUpload = File();
+    // 3. set file name for file to upload
     fileToUpload.name = config['cloud']['common']['DRIVE_BACKUP_FILE_NAME'];
+    // 4. check if the backup file is already exist
     final existFile = await isBackupExist();
     try {
+      // 5. if exist, call update
       if (existFile != null) {
         await (cloud as DriveApi).files.update(fileToUpload, existFile.id!,
             uploadMedia: Media(jsonFile.openRead(), jsonFile.lengthSync()));
       } else {
+        // 6. if is not exist, set path for file and call create
         fileToUpload.parents = [
           config['cloud']['common']['DRIVE_BACKUP_DIR_PARENT']
         ];
@@ -56,6 +62,7 @@ class GoogleDriveRepository extends BaseCloudRepository {
         print('cloud : uploaded');
       }
     } catch (err) {
+      // 7. catch any error while uploading process
       if (kDebugMode) {
         print(err);
         throw Exception('failed to upload to google drive');
@@ -65,12 +72,17 @@ class GoogleDriveRepository extends BaseCloudRepository {
 
   @override
   Future<String?> download({String? path}) async {
+    // 1. check backup before download
     final existFile = await isBackupExist();
     if (existFile == null) {
       return null;
     }
+    // 2. get drive file
     final Media driveFile = await cloud.files.get(existFile.id!,
         downloadOptions: DownloadOptions.fullMedia) as Media;
+    // 3. read stream from Google Drive to json string
+    // In there, I used JsonFile(I didn't mentioned in there)
+    // You can use any json package you want to use
     final jsonFileString = await JsonFile.streamToJson(driveFile.stream,
         fileName: config['cloud']['common']['DRIVE_BACKUP_FILE_NAME']);
     return jsonFileString;
