@@ -1,4 +1,3 @@
-import 'dart:io' as IO;
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
 import 'package:path_provider/path_provider.dart';
@@ -11,6 +10,14 @@ import '../base-cloud-repository.dart';
 
 class GoogleDriveRepository extends BaseCloudRepository {
   GoogleDriveRepository() : super();
+
+  initGoogleDriveCloud(Client newClient) {
+    client = newClient;
+    cloud = DriveApi(client!);
+    if (kDebugMode) {
+      print('cloud : set');
+    }
+  }
 
   @override
   Future<File?> isBackupExist({String? path}) async {
@@ -34,17 +41,15 @@ class GoogleDriveRepository extends BaseCloudRepository {
     final fileToUpload = File();
     fileToUpload.name = config['cloud']['common']['DRIVE_BACKUP_FILE_NAME'];
     final existFile = await isBackupExist();
-    File response;
     try {
       if (existFile != null) {
-        response = await (cloud as DriveApi).files.update(
-            fileToUpload, existFile.id!,
+        await (cloud as DriveApi).files.update(fileToUpload, existFile.id!,
             uploadMedia: Media(jsonFile.openRead(), jsonFile.lengthSync()));
       } else {
         fileToUpload.parents = [
           config['cloud']['common']['DRIVE_BACKUP_DIR_PARENT']
         ];
-        response = await (cloud as DriveApi).files.create(fileToUpload,
+        await (cloud as DriveApi).files.create(fileToUpload,
             uploadMedia: Media(jsonFile.openRead(), jsonFile.lengthSync()));
       }
       if (kDebugMode) {
@@ -68,9 +73,6 @@ class GoogleDriveRepository extends BaseCloudRepository {
         downloadOptions: DownloadOptions.fullMedia) as Media;
     final jsonFileString = await JsonFile.streamToJson(driveFile.stream,
         fileName: config['cloud']['common']['DRIVE_BACKUP_FILE_NAME']);
-    if (kDebugMode) {
-      print('cloud json : $jsonFileString');
-    }
     return jsonFileString;
   }
 }

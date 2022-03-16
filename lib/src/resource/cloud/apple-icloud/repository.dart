@@ -38,9 +38,6 @@ class AppleICloudRepository extends BaseCloudRepository {
     final jsonFile = await JsonFile.stringToJsonFile(jsonString,
         dirPath: dirPath,
         fileName: config['cloud']['common']['DRIVE_BACKUP_FILE_NAME']);
-    if (kDebugMode) {
-      print(jsonFile.path);
-    }
     await _icloud!.startUpload(
         filePath: jsonFile.path,
         destinationFileName:
@@ -116,7 +113,6 @@ class AppleICloudRepository extends BaseCloudRepository {
           fileName: config['cloud']['common']['DRIVE_BACKUP_FILE_NAME']);
       if (kDebugMode) {
         print('ios cloud : downloaded from icloud dir');
-        print(jsonString);
       }
       return jsonString;
     } catch (e) {

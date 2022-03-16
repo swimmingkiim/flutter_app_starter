@@ -1,5 +1,3 @@
-import 'package:flutter/foundation.dart';
-import 'package:googleapis/drive/v3.dart';
 import 'package:http/http.dart';
 
 class BaseCloudRepository {
@@ -7,14 +5,6 @@ class BaseCloudRepository {
   dynamic cloud;
 
   BaseCloudRepository();
-
-  initGoogleDriveCloud(Client newClient) {
-    client = newClient;
-    cloud = DriveApi(client!);
-    if (kDebugMode) {
-      print('cloud : set');
-    }
-  }
 
   clearData() {
     client = null;
